@@ -1,22 +1,25 @@
 import logging
 import os
 
-loggers = {}
+LOGGER:logging.Logger = None
 
 
-def log(text, level=logging.INFO, name="WDM", first_line=False, formatter='[%(name)s] - %(message)s'):
-    log_level = os.getenv('WDM_LOG_LEVEL')
-    if log_level:
-        level = int(log_level)
-    if loggers.get(name):
-        loggers.get(name).info(text)
+def log(text, logger:logging.Logger=None, filename:str=None, level=logging.INFO, formatter='[%(name)s] - %(message)s'):
+    if logger:
+        logger.info(f'WDM: {text}')
+        LOGGER = logger
+        return
+    
+    formatter = logging.Formatter(formatter)
+    if filename:
+        handler = logging.FileHandler(filename)
     else:
-        _logger = logging.getLogger(name)
-
         handler = logging.StreamHandler()
-        formatter = logging.Formatter(formatter)
-        handler.setFormatter(formatter)
-        _logger.addHandler(handler)
-        _logger.setLevel(level)
-        loggers[name] = _logger
-        _logger.info(text)
+    
+    if not LOGGER:
+        LOGGER = logging.getLogger('WDM')
+    
+    handler.setFormatter(formatter)
+    LOGGER.addHandler(handler)
+    LOGGER.setLevel(level)
+    LOGGER.info(text)

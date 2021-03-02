@@ -79,7 +79,7 @@ class GeckoDriver(Driver):
         self.auth_header = None
         self.browser_version = ""
         if self._os_token:
-            log("GH_TOKEN will be used to perform requests", first_line=True)
+            log("GH_TOKEN will be used to perform requests")
             self.auth_header = {'Authorization': f'token {self._os_token}'}
 
     def get_latest_release_version(self):
