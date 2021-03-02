@@ -5,9 +5,13 @@ LOGGER:logging.Logger = None
 
 
 def log(text, logger:logging.Logger=None, filename:str=None, level=logging.INFO, formatter='[%(name)s] - %(message)s'):
+    global LOGGER
     if logger:
-        logger.info(f'WDM: {text}')
+        logger.info(f'WDM - {text}')
         LOGGER = logger
+        return
+    elif LOGGER:
+        LOGGER.info(f'WDM - {text}')
         return
     
     formatter = logging.Formatter(formatter)
